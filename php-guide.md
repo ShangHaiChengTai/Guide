@@ -13,7 +13,7 @@
 
 ---
 
-## 1. PSR规范
+## 1 PSR规范
 > [PHP-FIG PSR中文版](https://github.com/PizzaLiu/PHP-FIG/edit/master/PSR-1-basic-coding-standard-cn.md "PHP-FIG PSR中文版")
 
 ---
@@ -852,6 +852,7 @@ class LogLevel
 | \Symfony\Core\Request         | Symfony\Core       | ./vendor/Symfony/Core/   | ./vendor/Symfony/Core/Request.php
 | \Zend\Acl                     | Zend               | /usr/includes/Zend/      | /usr/includes/Zend/Acl.php
 
-## 2. CI规范
+## 2 CI规范
 
 ---
+
