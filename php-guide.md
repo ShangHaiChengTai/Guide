@@ -8,30 +8,65 @@
 
 ## 文档目录
 
-1. [PSR规范](#1-psr规范)
-2. [CI规范](#2-ci规范)
+1. [基本代码规范](#1-基本代码规范)
+2. [注释规范](#2-注释规范)
+3. [良好实践](#3-良好实践)
 
 ---
 
-## 1 PSR规范
-> [PHP-FIG PSR中文版](https://github.com/PizzaLiu/PHP-FIG/edit/master/PSR-1-basic-coding-standard-cn.md "PHP-FIG PSR中文版")
+## 1 基本代码规范
 
----
+> 基本代码规范以现有行业的主流规范**PHP-FIG PSR**规范为主，遇到CodeIgniter框架不能绕过的地方（如model命名等）则用CodeIgniter框架建议规范；<br />
+> 
+> 参考：<br />
+> [PHP-FIG PSR中文版](https://github.com/PizzaLiu/PHP-FIG/edit/master/PSR-1-basic-coding-standard-cn.md "PHP-FIG PSR中文版") <br />
+> [CodeIgniter PHP开发规范](http://codeigniter.org.cn/user_guide/general/styleguide.html "CodeIgniter PHP开发规范")
 
-### 1.1. PSR-1 基本代码规范
+### 1.1. PHP标签
 
----
-
-#### 1.1.1. PHP标签
-
-PHP代码**必须**使用 `<?php ?>` 长标签 或 `<?= ?>` 短输出标签；
+PHP代码**必须**使用 `<?php ?>` 长标签或 `<?= ?>` 短输出标签；
 **一定不可**使用其它自定义标签。
 
-#### 1.1.2. 字符编码
+### 1.2. 字符编码
 
-PHP代码**必须**且只可使用`不带BOM的UTF-8`编码。
+PHP代码**必须**且只可使用`不带 BOM 的 UTF-8`编码。
 
-#### 1.1.3. 从属效应（副作用）
+> 和 UTF-16 和 UTF-32 不一样，UTF-8 编码格式的文件不需要指定字节序; BOM 会在 PHP 的输出中产生副作用，它会阻止应用程序设置它的头信息。
+
+### 1.3. 文件
+
+- 所有PHP文件**必须**使用`Unix LF (linefeed)`作为行的结束符。
+
+- 所有PHP文件**必须**以一个空白行作为结束。
+
+- 纯PHP代码文件**必须**省略最后的 `?>` 结束标签。
+
+> PHP 结束标签 `?>` 对于 PHP 解析器来说是可选的，但是只要使用了，结束标签之后的空格 有可能会导致不想要的输出，这个空格可能是由开发者或者用户又或者 FTP 应用程序引入的， 甚至可能导致出现 PHP 错误，如果配置了不显示 PHP 错误，就会出现空白页面。基于这个原因， 所有的 PHP 文件将不使用结束标签，而是以一个空行代替。
+
+类文件的命名必须以大写字母开头，其他文件（配置文件，视图，一般的脚本文件等）的命名是全小写。
+
+错误的：
+
+```php
+somelibrary.php
+someLibrary.php
+SOMELIBRARY.php
+Some_Library.php
+
+Application_config.php
+Application_Config.php
+applicationConfig.php
+```
+
+正确的：
+
+```php
+Somelibrary.php
+
+application_config.php
+```
+
+### 1.4. 从属效应（副作用）
 
 一份PHP文件中**应该**要不就只定义新的声明，如类、函数或常量等不产生从属效应的操作，要不就只有会产生从属效应的逻辑操作，但**不该**同时具有两者。
 
@@ -79,11 +114,9 @@ if (! function_exists('bar')) {
 }
 ```
 
-#### 1.1.4. 命名空间和类
+### 1.5. 命名空间和类
 
-命名空间以及类的命名必须遵循 [PSR-4][]。
-
-根据规范，每个类都独立为一个文件，且命名空间至少有一个层次：顶级的组织名称（vendor name）。
+每个类都独立为一个文件，且命名空间至少有一个层次：顶级的组织名称（vendor name）。
 
 类的命名必须 遵循 `StudlyCaps` 大写开头的驼峰命名规范。
 
@@ -110,7 +143,12 @@ class Vendor_Model_Foo
 {
 }
 ```
-#### 1.1.5. 常量
+
+### 1.6. 变量
+
+变量的命名**必须**遵循 `camelCase` 小写开头的驼峰命名规范， 并且应该语义明确，能指出该变量的用途。非常短的无意义的变量只应该在 `for` 等循环中作为迭代器使用。
+
+### 1.7. 常量
 
 类的常量中所有字母都**必须**大写，词间以下划线分隔。
 参照以下代码：
@@ -126,27 +164,56 @@ class Foo
 }
 ```
 
-#### 1.1.6. 属性
+### 1.8. 属性
 
-类的属性命名可以遵循 大写开头的驼峰式 (`$StudlyCaps`)、小写开头的驼峰式 (`$camelCase`) 又或者是 下划线分隔式 (`$under_score`)，本规范不做强制要求，但无论遵循哪种命名方式，都**应该**在一定的范围内保持一致。这个范围可以是整个团队、整个包、整个类或整个方法。
+类的属性命名**必须**遵循小写开头的驼峰式 `$camelCase`，同变量的命名方式。
 
-#### 1.1.7. 方法
+每个属性都**必须**添加访问修饰符。
+
+**一定不可**使用关键字 `var` 声明一个属性。
+
+每条语句**一定不可**定义超过一个属性。
+
+**不要**使用下划线作为前缀，来区分属性是 protected 或 private。
+
+以下是属性声明的一个范例：
+
+```php
+<?php
+namespace Vendor\Package;
+
+class ClassName
+{
+    public $foo = null;
+}
+```
+
+### 1.9. 方法
 
 方法名称**必须**符合 `camelCase()` 式的小写开头驼峰命名规范。
 
-### 1.2. PSR-2 代码风格规范
+所有方法都**必须**添加访问修饰符。
 
----
+**不要**使用下划线作为前缀，来区分方法是 protected 或 private。
 
-#### 1.2.1. 文件
+方法名称后**一定不能**有空格符，其开始花括号**必须**独占一行，结束花括号也**必须**在方法主体后单独成一行。参数左括号后和右括号前**一定不能**有空格。
 
-- 所有PHP文件**必须**使用`Unix LF (linefeed)`作为行的结束符。
+一个标准的方法声明可参照以下范例，留意其括号、逗号、空格以及花括号的位置。
 
-- 所有PHP文件**必须**以一个空白行作为结束。
+```php
+<?php
+namespace Vendor\Package;
 
-- 纯PHP代码文件**必须**省略最后的 `?>` 结束标签。
+class ClassName
+{
+    public function fooBarBaz($arg1, &$arg2, $arg3 = [])
+    {
+        // method body
+    }
+}
+```
 
-#### 1.2.2. 行
+### 1.10. 行
 
 - 行的长度**一定不能**有硬性的约束。
     软性的长度约束**一定**要限制在120个字符以内，若超过此长度，带代码规范检查的编辑器**一定**要发出警告，不过**一定不可**发出错误提示。
@@ -159,7 +226,7 @@ class Foo
 
 - 每行**一定不能**存在多于一条语句
 
-#### 1.2.3. 缩进
+### 1.11. 缩进
 
 代码**必须**使用4个空格符的缩进，**一定不能**用 tab键 。
 
@@ -167,13 +234,15 @@ class Foo
 > 避免在比较代码差异、打补丁、重阅代码以及注释时产生混淆。
 > 并且，使用空格缩进，让对齐变得更方便。
 
-#### 1.2.4. 关键字 以及 True/False/Null
+### 1.12. 关键字 以及 True/False/Null
 
 常量 `true` 、`false` 和 `null` 也**必须**全部小写。
 
-关键字：[http://php.net/manual/en/reserved.keywords.php](http://php.net/manual/en/reserved.keywords.php "关键字")
+> 注意这里与CodeIgniter框架建议规范相反
 
-#### 1.2.5. namespace 以及 use 声明
+关键字文档：[http://php.net/manual/zh/reserved.keywords.php](http://php.net/manual/zh/reserved.keywords.php "关键字")
+
+### 1.13. namespace 以及 use 声明
 
 `namespace` 声明后 必须 插入一个空白行。
 
@@ -197,7 +266,7 @@ use OtherVendor\OtherPackage\BazClass;
 
 ```
 
-#### 1.2.6. 扩展与继承
+### 1.14. 扩展与继承
 
 关键词 `extends` 和 `implements`**必须**写在类名称的同一行。
 
@@ -236,52 +305,7 @@ class ClassName extends ParentClass implements
 }
 ```
 
-#### 1.2.7. 属性
-
-每个属性都**必须**添加访问修饰符。
-
-**一定不可**使用关键字 `var` 声明一个属性。
-
-每条语句**一定不可**定义超过一个属性。
-
-**不要**使用下划线作为前缀，来区分属性是 protected 或 private。
-
-以下是属性声明的一个范例：
-
-```php
-<?php
-namespace Vendor\Package;
-
-class ClassName
-{
-    public $foo = null;
-}
-```
-
-#### 1.2.8. 方法
-
-所有方法都**必须**添加访问修饰符。
-
-**不要**使用下划线作为前缀，来区分方法是 protected 或 private。
-
-方法名称后**一定不能**有空格符，其开始花括号**必须**独占一行，结束花括号也**必须**在方法主体后单独成一行。参数左括号后和右括号前**一定不能**有空格。
-
-一个标准的方法声明可参照以下范例，留意其括号、逗号、空格以及花括号的位置。
-
-```php
-<?php
-namespace Vendor\Package;
-
-class ClassName
-{
-    public function fooBarBaz($arg1, &$arg2, $arg3 = [])
-    {
-        // method body
-    }
-}
-```
-
-#### 1.2.9. 方法的参数
+### 1.15. 方法的参数
 
 参数列表中，每个逗号后面**必须**要有一个空格，而逗号前面**一定不能**有空格。
 
@@ -320,7 +344,7 @@ class ClassName
 }
 ```
 
-#### 1.2.10. `abstract` 、 `final` 、 以及 `static`
+### 1.16. `abstract` 、 `final` 、 以及 `static`
 
 需要添加 `abstract` 或 `final` 声明时， **必须**写在访问修饰符前，而 `static` 则**必须**写在其后。
 
@@ -341,7 +365,7 @@ abstract class ClassName
 }
 ```
 
-#### 1.2.11. 方法及函数调用
+### 1.17. 方法及函数调用
 
 方法及函数调用时，方法名或函数名与参数左括号之间**一定不能**有空格，参数右括号前也 **一定不能**有空格。每个逗号前**一定不能**有空格，但其后**必须**有一个空格。
 
@@ -363,7 +387,7 @@ $foo->bar(
 );
 ```
 
-#### 1.2.12. 控制结构
+### 1.18. 控制结构
 
 控制结构的基本规范如下：
 
@@ -377,7 +401,7 @@ $foo->bar(
 每个结构体的主体都**必须**被包含在成对的花括号之中，
 这能让结构体更加结构话，以及减少加入新行时，出错的可能性。
 
-#### 1.2.13. `if` 、 `elseif` 和 `else`
+### 1.19. `if` 、 `elseif` 和 `else`
 
 标准的 `if` 结构如下代码所示，留意 括号、空格以及花括号的位置，
 注意 `else` 和 `elseif` 都与前面的结束花括号在同一行。
@@ -395,7 +419,7 @@ if ($expr1) {
 
 **应该**使用关键词 `elseif` 代替所有 `else if` ，以使得所有的控制关键字都像是单独的一个词
 
-#### 1.2.14. `switch` 和 `case`
+### 1.20. `switch` 和 `case`
 
 标准的 `switch` 结构如下代码所示，留意括号、空格以及花括号的位置。
 `case` 语句**必须**相对 `switch` 进行一次缩进，而 `break` 语句以及 `case` 内的其它语句都 必须 相对 `case` 进行一次缩进。
@@ -421,7 +445,7 @@ switch ($expr) {
 }
 ```
 
-#### 1.2.15. `while` 和 `do while`
+### 1.21. `while` 和 `do while`
 
 一个规范的 `while` 语句应该如下所示，注意其 括号、空格以及花括号的位置。
 
@@ -441,7 +465,7 @@ do {
 } while ($expr);
 ```
 
-#### 1.2.16. `for`
+### 1.22. `for`
 
 标准的 `for` 语句如下所示，注意其 括号、空格以及花括号的位置。
 
@@ -452,7 +476,7 @@ for ($i = 0; $i < 10; $i++) {
 }
 ```
 
-#### 1.2.17. `foreach`
+### 1.23. `foreach`
 
 标准的 `foreach` 语句如下所示，注意其 括号、空格以及花括号的位置。
 
@@ -463,7 +487,7 @@ foreach ($iterable as $key => $value) {
 }
 ```
 
-#### 1.2.18. `try`, `catch`
+### 1.24. `try`, `catch`
 
 标准的 `try catch` 语句如下所示，注意其 括号、空格以及花括号的位置。
 
@@ -478,7 +502,27 @@ try {
 }
 ```
 
-#### 1.2.19. 闭包
+### 1.25. 逻辑操作符
+
+逻辑操作符的前后都**必须**要有一个空格，但 `!` 操作符只需在后面加一个空格即可。
+
+```php
+if ($foo || $bar)
+if ($foo && $bar)
+if (! is_array($foo))
+```
+
+### 1.26. 字符串
+
+字符串使用单引号引起来，当字符串中有变量时使用双引号，并且使用大括号将变量包起来。 另外，当字符串中有单引号时，也应该使用双引号，这样就不用使用转义符。
+
+```php
+'My String'
+"My string {$foo}"
+"SELECT foo FROM bar WHERE baz = 'bag'"
+```
+
+### 1.27. 闭包
 
 闭包声明时，关键词 `function` 后以及关键词 `use` 的前后都**必须**要有一个空格。
 
@@ -569,246 +613,7 @@ $foo->bar(
 );
 ```
 
-### 1.3. PSR-3 日志接口规范
----
-
-#### 1.3.1. 基本规范
-
-- `LoggerInterface` 接口对外定义了八个方法，分别用来记录 [RFC 5424][] 中定义的八个等级的日志：debug、 info、 notice、 warning、 error、 critical、 alert 以及 emergency 。
-
-- 第九个方法 —— `log`，其第一个参数为记录的等级。可使用一个预先定义的等级常量作为参数来调用此方法，**必须**与直接调用以上八个方法具有相同的效果。如果传入的等级常量参数没有预先定义，则**必须**抛出 `Psr\Log\InvalidArgumentException` 类型的异常。在不确定的情况下，使用者**不该**使用未支持的等级常量来调用此方法。
-
-#### 1.3.2. 记录信息
-
-- 以上每个方法都接受一个字符串类型或者是有 `__toString()` 方法的对象作为记录信息参数，这样，实现者就能把它当成字符串来处理，否则实现者**必须**自己把它转换成字符串。
-
-- 记录信息参数**可以**携带占位符，实现者**可以**根据上下文将其它替换成相应的值。
-
-  其中占位符**必须**与上下文数组中的键名保持一致。
-
-  占位符的名称**必须**由一个左花括号 `{` 以及一个右括号 `}` 包含。但花括号与名称之间**一定不能**有空格符。
-
-  占位符的名称**应该**只由 `A-Z`、 `a-z`,`0-9`、下划线 `_`、以及英文的句号 `.`组成，其它字符作为将来占位符规范的保留。
-
-  实现者**可以**通过对占位符采用不同的转义和转换策略，来生成最终的日志。
-  而使用者在不知道上下文的前提下，**不该**提前转义占位符。
-
-  以下是一个占位符使用的例子：
-
-  ```php
-  /**
-   * 用上下文信息替换记录信息中的占位符
-   */
-  function interpolate($message, array $context = array())
-  {
-      // 构建一个花括号包含的键名的替换数组
-      $replace = array();
-      foreach ($context as $key => $val) {
-          $replace['{' . $key . '}'] = $val;
-      }
-
-      // 替换记录信息中的占位符，最后返回修改后的记录信息。
-      return strtr($message, $replace);
-  }
-
-  // 含有带花括号占位符的记录信息。
-  $message = "User {username} created";
-
-  // 带有替换信息的上下文数组，键名为占位符名称，键值为替换值。
-  $context = array('username' => 'bolivar');
-
-  // 输出 "Username bolivar created"
-  echo interpolate($message, $context);
-  ```
-
-#### 1.3.3. 上下文
-
-- 每个记录函数都接受一个上下文数组参数，用来装载字符串类型无法表示的信息。它**可以**装载任何信息，所以实现者**必须**确保能正确处理其装载的信息，对于其装载的数据，**一定不能** 抛出异常，或产生PHP出错、警告或提醒信息（error、warning、notice）。
-
-- 如需通过上下文参数传入了一个 `Exception` 对象， **必须**以 `'exception'` 作为键名。
-记录异常信息是很普遍的，所以如果它能够在记录类库的底层实现，就能够让实现者从异常信息中抽丝剥茧。
-当然，实现者在使用它时，**必须**确保键名为 `'exception'` 的键值是否真的是一个 `Exception`，毕竟它**可以**装载任何信息。
-
-#### 1.3.4. 助手类和接口
-
-- `Psr\Log\AbstractLogger` 类使得只需继承它和实现其中的 `log` 方法，就能够很轻易地实现 `LoggerInterface` 接口，而另外八个方法就能够把记录信息和上下文信息传给它。
-
-- 同样地，使用  `Psr\Log\LoggerTrait`  也只需实现其中的 `log` 方法。不过，需要特别注意的是，在traits可复用代码块还不能实现接口前，还需要  `implement LoggerInterface`。
-
-- 在没有可用的日志记录器时， `Psr\Log\NullLogger` 接口**可以**为使用者提供一个备用的日志“黑洞”。不过，当上下文的构建非常消耗资源时，带条件检查的日志记录或许是更好的办法。
-
-- `Psr\Log\LoggerAwareInterface` 接口仅包括一个
-  `setLogger(LoggerInterface $logger)` 方法，框架可以使用它实现自动连接任意的日志记录实例。
-
-- `Psr\Log\LoggerAwareTrait` trait可复用代码块可以在任何的类里面使用，只需通过它提供的 `$this->logger`，就可以轻松地实现等同的接口。
-
-- `Psr\Log\LogLevel` 类装载了八个记录等级常量。
-
-#### 1.3.5. 包
-
-上述的接口、类和相关的异常类，以及一系列的实现检测文件，都包含在 [psr/log](https://packagist.org/packages/psr/log) 文件包中。
-
-#### 1.3.6. `Psr\Log\LoggerInterface`
-
-```php
-<?php
-
-namespace Psr\Log;
-
-/**
- * 日志记录实例
- *
- * 日志信息变量 —— message， **必须**是一个字符串或是实现了  __toString() 方法的对象。
- *
- * 日志信息变量中**可以**包含格式如 “{foo}” (代表foo) 的占位符，
- * 它将会由上下文数组中键名为 "foo" 的键值替代。
- *
- * 上下文数组可以携带任意的数据，唯一的限制是，当它携带的是一个 exception 对象时，它的键名 必须 是 "exception"。
- *
- * 详情可参阅： https://github.com/PizzaLiu/PHP-FIG/blob/master/PSR-3-logger-interface-cn.md
- */
-interface LoggerInterface
-{
-    /**
-     * 系统不可用
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function emergency($message, array $context = array());
-
-    /**
-     * **必须**立刻采取行动
-     *
-     * 例如：在整个网站都垮掉了、数据库不可用了或者其他的情况下，**应该**发送一条警报短信把你叫醒。
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function alert($message, array $context = array());
-
-    /**
-     * 紧急情况
-     *
-     * 例如：程序组件不可用或者出现非预期的异常。
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function critical($message, array $context = array());
-
-    /**
-     * 运行时出现的错误，不需要立刻采取行动，但必须记录下来以备检测。
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function error($message, array $context = array());
-
-    /**
-     * 出现非错误性的异常。
-     *
-     * 例如：使用了被弃用的API、错误地使用了API或者非预想的不必要错误。
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function warning($message, array $context = array());
-
-    /**
-     * 一般性重要的事件。
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function notice($message, array $context = array());
-
-    /**
-     * 重要事件
-     *
-     * 例如：用户登录和SQL记录。
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function info($message, array $context = array());
-
-    /**
-     * debug 详情
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function debug($message, array $context = array());
-
-    /**
-     * 任意等级的日志记录
-     *
-     * @param mixed $level
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function log($level, $message, array $context = array());
-}
-```
-
-#### 1.3.7. `Psr\Log\LoggerAwareInterface`
-
-```php
-<?php
-
-namespace Psr\Log;
-
-/**
- * logger-aware 定义实例
- */
-interface LoggerAwareInterface
-{
-    /**
-     * 设置一个日志记录实例
-     *
-     * @param LoggerInterface $logger
-     * @return null
-     */
-    public function setLogger(LoggerInterface $logger);
-}
-```
-
-#### 1.3.8. `Psr\Log\LogLevel`
-
-```php
-<?php
-
-namespace Psr\Log;
-
-/**
- * 日志等级常量定义
- */
-class LogLevel
-{
-    const EMERGENCY = 'emergency';
-    const ALERT     = 'alert';
-    const CRITICAL  = 'critical';
-    const ERROR     = 'error';
-    const WARNING   = 'warning';
-    const NOTICE    = 'notice';
-    const INFO      = 'info';
-    const DEBUG     = 'debug';
-}
-```
-
-### 1.4. PSR-4 自动载入规范
-
----
+### 1.29. 类的层次结构
 
 此处的“类”泛指所有的class类、接口、traits可复用代码块以及其它类似结构。
 
@@ -829,18 +634,6 @@ class LogLevel
 
     6. 所有类名都**必须**是大小写敏感的。
 
-
-当根据完整的类名载入相应的文件……
-
-    1. 完整的类名中，去掉最前面的命名空间分隔符，前面连续的一个或多个命名空间和子命名空间，作为“命名空间前缀”，其必须与至少一个“文件基目录”相对应；
-
-    2. 紧接命名空间前缀后的子命名空间**必须**与相应的”文件基目录“相匹配，其中的命名空间分隔符将作为目录分隔符。
-
-    3. 末尾的类名**必须**与对应的以 `.php` 为后缀的文件同名。
-
-    4. 自动加载器（autoloader）的实现**一定不能**抛出异常、**一定不能**触发任一级别的错误信息以及**不应该**有返回值。
-
-
 例子
 
 下表展示了符合规范完整类名、命名空间前缀和文件基目录所对应的文件路径。
@@ -852,7 +645,139 @@ class LogLevel
 | \Symfony\Core\Request         | Symfony\Core       | ./vendor/Symfony/Core/   | ./vendor/Symfony/Core/Request.php
 | \Zend\Acl                     | Zend               | /usr/includes/Zend/      | /usr/includes/Zend/Acl.php
 
-## 2 CI规范
+---
+
+## 2 注释规范
+
+通常情况下，**必须**写 DocBlock 风格的注释，写在类、方法和属性定义的前面，可以被 IDE 识别，方便生成API文档，这不仅可以向新加入开发的人员描述代码的流程和意图， 而且当你几个月后再回过头来看自己的代码时仍能帮你很好的理解。
+
+> 注释规范参考：[phpDocumentor标签文档](https://www.phpdoc.org/docs/latest/index.html "phpDocumentor标签文档")
+
+类注释：
+
+```php
+/**
+ * Super Class
+ *
+ * @package     Package Name
+ * @subpackage  Subpackage
+ * @category    Category
+ * @author      Author Name
+ * @link        http://example.com
+ */
+class SuperClass {
+```
+
+函数/方法注释：
+
+```php
+/**
+ * Encodes string for use in XML
+ *
+ * @param   string  $str  Input string
+ * @return  string
+ */
+public function xmlEncode($str)
+```
+
+变量/属性注释：
+
+```php
+/**
+ * Data for class manipulation
+ *
+ * @var array
+ */
+public $data = array();
+```
+
+单行注释应该和代码合在一起，大块的注释和代码之间应该留一个空行:
+
+```php
+// break up the string by newlines
+$parts = explode("\n", $str);
+
+// A longer comment that needs to give greater detail on what is
+// occurring and why can use multiple single-line comments.  Try to
+// keep the width reasonable, around 70 characters is the easiest to
+// read.  Don't hesitate to link to permanent external resources
+// that may provide greater detail:
+//
+// http://example.com/information_about_something/in_particular/
+
+$parts = $this->foo($parts);
+```
+
+在控制结构的分支中**必须**加上注释以说明运行走向，方便其他人员理解。
+
+```php
+if (exp1) {         // 走向1
+
+} elseif (exp2) {   // 走向2
+
+} else {            // 走向3
+
+}
+```
 
 ---
 
+## 3 良好实践
+
+### 3.1. 公共和保护接口最小化原则
+
+面向对象程序设计的基本点之一是最小化一个类的公共接口。这样做有几个理由：
+
+- 可学习性。要了解如何使用一个类，只需了解它的公共接口即可。公共接口越小，类越容易学习。
+
+- 减少耦合。当一个类的实例向另一个类的实例或者直接向这个类发送一条消息时，这两个类变 得耦合起来。最小化公共接口意味着将耦合的可能降到最低。
+更大的灵活性。这直接与耦合相联系。一旦想改变一个公共接口的成员函数的实现方法，如你可能想修改成员函数的返回值，那么你很可能不得不修改所有调用了该成员函数的代码。公共接口越小，封装性就越大，代码的灵活性也越大。
+
+- 尽力使公共接口最小化这一点明显地很值得你的努力，但通常不明显的是也应使被保护接口最小化。基本思想是，从一个子类的角度来看，它所有超类的被保护接口是公共的。任何在被保护接口内的成员函数可被一个子类调用。所以，出于与最小化公共接口同样的理由，应最小类的被保护接口。
+- 首先定义公共接口。大多数有经验的开发者在开始编写类的代码之前就先定义类的公共接口。 第一，如果你不知道一个类要完成怎样的服务/行为，你仍有一些设计工作要做。第二，这样做使这个类很快地初具雏形，以便其他有赖于该类的开发者在“真正的”类被开发出来以前至少可以用这个雏形开始工作。第三，这种方法给你提供了一个初始框架，围绕着这个框架你构造类。
+
+### 3.2. 测试维护
+
+- 时间允许，原则上要求写单元测试，且至少达到语句覆盖。
+
+- 清理、整理或优化后的代码要经过审查及测试。
+
+- 代码版本升级要经过严格测试。
+
+### 3.3. 安全性
+
+- 所有用户输入的数据都要经过安全过滤，防止注入或xss跨站攻击等。
+
+- 所有数据在插入数据库之前，均需要进行`addslashes()`处理，以免特殊字符未经转义在插入数据库的时候出现错误。CI默认情况下已经使用了`addslashes()`进行了转义，不必重复进行。如果数据处理必要(例如用于直接显示)，可以使用 `stripslashes()` 恢复，但数据在插入数据库之前必须再次进行转义。
+
+- 在CI框架内文件首行都要写上：`if (! defined('BASEPATH')) exit('No direct script access allowed')`;
+
+### 3.4. 性能约束
+
+在写代码的时候，从头至尾都应该考虑性能问题。这不是说时间都应该浪费在优化代码上，而是我们时刻应该提醒自己要注意代码的效率。
+
+比如：如果没有时间来实现一个高效的算法，那么我们应该在文档中记录下来，以便在以后有空的时候再来实现她。
+
+不是所有的人都同意在写代码的时候应该优化性能这个观点的，他们认为性能优化的问题应该在项目的后期再去考虑，也就是在程序的轮廓已经实现了以后。
+
+一些良好性能写法如：
+
+- 单引号中，任何变量(`$var`)、特殊转义字符(如“`\t \r \n`”等)不会被解析，因此PHP的解析速度更快，转义字符仅仅支持“`\`’”和“`\\`”这样对单引号和反斜杠本身的转义；双引号中，变量(`$var`)值会代入字符串中，特殊转义字符也会被解析成特定的单个字符，还有一些专门针对上述两项特性的特殊功能性转义，例如“`\$`”和“`{$array['key']}`。这样虽然程序编写更加方便，但同时PHP的解析也很慢；在绝大多数可以使用单引号的场合，禁止使用双引号。
+
+- 数组中，如果下标不是整型，而是字符串类型，请务必用单引号将下标括起，正确的写法为`$array['key']`，而不是`$array[key]`，因为不正确的写法会使PHP解析器认为key是一个常量，进而先判断常量是否存在，不存在时才以“`key`”作为下标带入表达式中，同时出发错误事件，产生一条Notice级错误。
+
+- 如非必要，能用字符操作函数绝不用正则表达式。
+
+- 自增自减，操作符置于变量前面，如`++$i`, `$i++`会多一步赋值临时变量操作。
+
+- 尽量用php原生的函数，google或百度后确实没有原生函数能实现目的，再自己封装。
+
+- 检测变量是否设置，用`isset()`是最快的，要多注意php函数的时间复杂度,尽量用最佳的函数达到目的。
+
+- 不要在循环中调用函数或赋值，如`for（$i, $i < count($arr), ++$i）`每次循环都会count一次。
+
+### 3.5. 不做无用功
+
+- 当时间不是很足时，如非必要，不要大范围的重构代码；
+
+- 在代码量不是很大的时候，不要滥用设计模式，因为这有时会导致性能的下降；
