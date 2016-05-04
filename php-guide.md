@@ -118,7 +118,7 @@ if (! function_exists('bar')) {
 
 每个类都独立为一个文件，且命名空间至少有一个层次：顶级的组织名称（vendor name）。
 
-类的命名必须 遵循 `StudlyCaps` 大写开头的驼峰命名规范。
+类的命名**必须**遵循 `StudlyCaps` 大写开头的驼峰命名规范。
 
 PHP 5.3及以后版本的代码**必须**使用正式的命名空间。
 
@@ -238,9 +238,8 @@ class ClassName
 
 常量 `true` 、`false` 和 `null` 也**必须**全部小写。
 
-> 注意这里与CodeIgniter框架建议规范相反
-
-关键字文档：[http://php.net/manual/zh/reserved.keywords.php](http://php.net/manual/zh/reserved.keywords.php "关键字")
+> 注意这里与CodeIgniter框架建议规范相反 <br />
+> 关键字文档：[http://php.net/manual/zh/reserved.keywords.php](http://php.net/manual/zh/reserved.keywords.php "关键字")
 
 ### 1.13. namespace 以及 use 声明
 
