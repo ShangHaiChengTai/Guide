@@ -19,7 +19,7 @@
 > 基本代码规范以现有行业的主流规范**PHP-FIG PSR**规范为主，遇到CodeIgniter框架不能绕过的地方（如model命名等）则用CodeIgniter框架建议规范；<br />
 > 
 > 参考：<br />
-> [PHP-FIG PSR中文版](https://github.com/PizzaLiu/PHP-FIG/edit/master/PSR-1-basic-coding-standard-cn.md "PHP-FIG PSR中文版") <br />
+> [PHP-FIG PSR中文版](https://github.com/PizzaLiu/PHP-FIG "PHP-FIG PSR中文版") <br />
 > [CodeIgniter PHP开发规范](http://codeigniter.org.cn/user_guide/general/styleguide.html "CodeIgniter PHP开发规范")
 
 ### 1.1. PHP标签
