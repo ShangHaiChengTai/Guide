@@ -14,5 +14,5 @@
 
 ## 规范列表：
 
-* [PHP规范](https://github.com/homesheer/Guide/blob/master/php-guide.md) [0.0.1]
-* [SQL规范](https://github.com/homesheer/Guide/blob/master/sql-guide.md) [0.0.1]
+* [PHP规范](https://github.com/ShangHaiChengTai/Guide/blob/master/php-guide.md) [0.0.1]
+* [SQL规范](https://github.com/ShangHaiChengTai/Guide/blob/master/sql-guide.md) [0.0.1]
