@@ -24,7 +24,7 @@
 
 ### 1.1. PHP标签
 
-PHP代码**必须**使用 `<?php ?>` 长标签或 `<?= ?>` 短输出标签；
+PHP代码**必须**使用 `<?php ?>` 长标签；
 **一定不可**使用其它自定义标签。
 
 ### 1.2. 字符编码
@@ -61,7 +61,7 @@ applicationConfig.php
 正确的：
 
 ```php
-Somelibrary.php
+SomeLibrary.php
 
 application_config.php
 ```
