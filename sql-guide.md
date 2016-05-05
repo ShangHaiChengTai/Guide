@@ -37,9 +37,9 @@
 
 - 每个表都**必须**有一个自增主键 `id`。
 
-- 每个表都**必须**有 `create_time` 字段，字段类型**必须**为 `timestamp`，字段默认值必须为 `CURRENT_TIMESTAMP`。
+- 每个表都**必须**有 `create_time` 字段，字段类型**必须**为 `int(10)`，字段值必须为时间戳。
  
-- 每个表都**必须**有 `update_time` 字段，字段类型**必须**为 `timestamp`，字段默认值**必须**为 `CURRENT_TIMESTAMP`，**必须**是以当前时间戳自动更新。
+- 每个表都**必须**有 `update_time` 字段，字段类型**必须**为 `int(10)`，字段值必须为时间戳。
 
 - 每个表都**必须**有 `create_user` 字段，字段类型**必须**为 `int` ，字段长度**必须**设置为 `11`。
  
@@ -52,7 +52,9 @@
 - 字段名采用规范的英文小写格式，并且以下划线”_”分割，长度不能超过3个单词长度，单个单词长度超过10个字母的应当使用缩写，**禁止**使用mysql的关键字作为字段名， 正确的例子如 `user_id`、`room_type`。
 
 - `timestamp、image、datetime、smalldatetime、uniqueidentifier、binary、sql_variant、binary、varbinary` 外，必须有默认值。
- 
+
+- 如非必要，所有字段**必须**设为 `not null`。
+
 - 字符型的默认值为一个空字符值串 `''`。
  
 - 数值型的默认值为数值 `0` (具体看业务可以用其他数值)。
