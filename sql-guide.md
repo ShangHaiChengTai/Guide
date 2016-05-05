@@ -49,7 +49,7 @@
 
 ### 1.3. 字段
 
-- 字段名采用规范的英文小写格式，并且以下划线”_”分割，长度不能超过3个单词长度，单个单词长度超过10个字母的应当使用缩写，**禁止**使用mysql的关键字作为字段名， 如 `user_id`、`room_type`。
+- 字段名采用规范的英文小写格式，并且以下划线”_”分割，长度不能超过3个单词长度，单个单词长度超过10个字母的应当使用缩写，**禁止**使用mysql的关键字作为字段名， 正确的例子如 `user_id`、`room_type`。
 
 - `timestamp、image、datetime、smalldatetime、uniqueidentifier、binary、sql_variant、binary、varbinary` 外，必须有默认值。
  
