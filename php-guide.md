@@ -648,9 +648,12 @@ $foo->bar(
 
 ## 2 注释规范
 
-通常情况下，**必须**写 DocBlock 风格的注释，写在类、方法和属性定义的前面，可以被 IDE 识别，方便生成API文档，这不仅可以向新加入开发的人员描述代码的流程和意图， 而且当你几个月后再回过头来看自己的代码时仍能帮你很好的理解。
+通常情况下，**必须**写 DocBlock 风格的注释，写在类、方法和属性定义的前面，可以被 IDE 识别，方便生成文档，这不仅可以向新加入开发的人员描述代码的流程和意图， 而且当你几个月后再回过头来看自己的代码时仍能帮你很好的理解。
+
+作为提供 API 接口的方法，**必须**使用 apiDoc 要求的规范注释，以方便生成 API 文档。
 
 > 注释规范参考：[phpDocumentor标签文档](https://www.phpdoc.org/docs/latest/index.html "phpDocumentor标签文档")
+> apiDoc注释规范参考：[apiDoc标签文档](http://apidocjs.com/#params "apiDoc标签文档")
 
 类注释：
 
