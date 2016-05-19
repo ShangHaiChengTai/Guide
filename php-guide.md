@@ -652,7 +652,8 @@ $foo->bar(
 
 作为提供 API 接口的方法，**必须**使用 apiDoc 要求的规范注释，以方便生成 API 文档。
 
-> 注释规范参考：[phpDocumentor标签文档](https://www.phpdoc.org/docs/latest/index.html "phpDocumentor标签文档")
+> DocBlock注释规范参考：[phpDocumentor标签文档](https://www.phpdoc.org/docs/latest/index.html "phpDocumentor标签文档")
+<br />
 > apiDoc注释规范参考：[apiDoc标签文档](http://apidocjs.com/#params "apiDoc标签文档")
 
 类注释：
