@@ -16,3 +16,4 @@
 
 * [PHP规范](https://github.com/ShangHaiChengTai/Guide/blob/master/php-guide.md) [1.0.0]
 * [SQL规范](https://github.com/ShangHaiChengTai/Guide/blob/master/sql-guide.md) [1.0.0]
+* [PostgreSQL规范](https://github.com/ShangHaiChengTai/Guide/blob/master/PostgreSQL-guide.md) [1.0.0]
