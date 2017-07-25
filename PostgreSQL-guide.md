@@ -18,44 +18,48 @@ PostgreSQL功能异常强大，希望通过以下规范，使PostgreSQL的功能
 
 ## 2 设计规范
 
-### 2.1 数据库
+### 2.1 命名规范
+1. 数据库对象(备注1)使用小写字母，数字和下划线的组合。
 
-1. 为数据库访问账号设置复杂密码。
+1. 数据库对象(备注1)长度不超过63字符。
 
-1. 数据库的命名由一个单词组成，且均为小写，不要以postgre或者pg开头，禁止使用[SQL关键字](https://www.postgresql.org/docs/current/static/sql-keywords-appendix.html)。
+1. 数据库对象(备注1)命名尽量使用全名。当长度超过63字符时，可使用缩写来缩减长度。
 
-1. 数据库名长度限制在30字符以内。
+1. 数据库对象(备注1)命名不要以postgre或者pg或者数字开头。
 
-1. 库名最好与应用名称一致，便于辨识。
+1. 数据库对象(备注1)命名禁止使用拼音或者[SQL关键字](https://www.postgresql.org/docs/current/static/sql-keywords-appendix.html)。
 
-1. 不建议使用public schema，给每个服务分配对应的schema。
-
-1. 所有字符编码均采用UTF-8编码(show server_encoding)。
-
-### 2.2 数据表
-
-1. 表的命名为名词的复数形式，且均为小写，不要以postgre或者pg开头。如果表名由几个单词构成，单词之间用下划线("_")连接。
-
-1. 表名长度限制在30字符以内。表名尽量使用全名。当长度超过30位时，可使用缩写来缩减长度。
-
-1. 多张表中相同的列，以及有JOIN需求的列，务必保持列名和数据类型的一致。
+1. 建议表的命名采用名词的复数形式。
 
 1. 临时表以tmp_开头。
 
-1. 临时备份的数据表，建议在名称后加上日期(tabel\_XXX_YYYYMMDD)。
+1. 备份的数据表，建议在名称后加上日期(tabel\_XXX_YYYYMMDD)。
 
-1. 对于频繁更新的表，将填充因子(fillfactor)设置成85，每页预留15%的空间给HOT更新使用(备注1)。
+1. 索引按照表名_列名_idx的规则命名，建议使用DBMS默认的索引名称。
 
-1. 建议每张表都有主键，且采用以下的写法：id serial primary key或者id bigserial primary key。
+### 2.2 数据库
+
+1. 库名最好与应用名称一致，便于辨识。
+
+1. 不建议使用public schema，给每个服务分配对应的一个或者多个schema。
+
+1. 所有字符编码均采用UTF-8编码(备注2)。
+
+### 2.3 数据表
+
+1. 多张表中相同的列，以及有JOIN需求的列，务必保持列名和数据类型的一致。
+
+1. 对于频繁更新的表，将填充因子(fillfactor)设置成85，每页预留15%的空间给HOT更新使用(备注3)。
+
+1. 建议每张表都有主键，建议采用以下的写法：id serial primary key或者id bigserial primary key。
+
+1. 建议不要使用有业务含义的字段作为主键，比如身份证号，尽管其是unique的。
 
 1. 建议有定期历史数据删除需求的业务，表按时间分区，删除时不要使用DELETE操作，而是DROP或者TRUNCATE对应的表。
 
+### 2.4 数据表字段
 
-### 2.3 数据表字段
-
-1. 表字段的命名为有意义的单词或是单词的缩写，且均为小写。如果字段名由几个单词构成，单词之间用下划线("_")连接。
-
-1. 表字段名长度限制在30字符以内。
+1. 建议能用数字类型的就不用字符类型。
 
 1. 建议能用varchar(N)就不用char(N),以节省存储空间。
 
@@ -65,34 +69,40 @@ PostgreSQL功能异常强大，希望通过以下规范，使PostgreSQL的功能
 
 1. 建议使用NUMERIC，而不用real, double precision来存储要求精确计算的数值。
 
-1. 建议使用NUMERIC来存储金额相关的类型，在以分为单位的情况下也可以使用integer或者bigint。
+1. 建议使用macaddr来存储MAC地址。
+
+1. 对国际化业务有要求的时间字段，建议使用timestamptz来代替timestamp。
+
+1. 建议使用NUMERIC(precision, scale)来存储金额相关的类型，在以分为单位的情况下也可以使用integer或者bigint。
 
 1. 建议使用hstore来存储非结构化，key-value键值型。
 
 1. 建议使用ltree来存储树状层次结构数据。
 
-1. 建议使用json来存储JSON(JavaScript Object Notation)数据。
+1. 建议使用jsonb来存储JSON(JavaScript Object Notation)数据。
 
 1. 建议使用Geometric Types结合PostGIS来实现地理信息数据存储及操作。
 
+1. 建议使用Range类型代替字符串或者多列来实现范围的存储(备注4)。
+
 1. 建议对数据表字段加上COMMENT，便于后续的维护, COMMENT不要使用中文，可能会造成读写编码的不一致，请使用英文。
 
+### 2.5 数据索引
 
-### 2.4 数据索引
- 
-1. 主键索引按照pk_表名_字段名的规则命名。
+1. 建议创建或者删除索引时，加CONCURRENTLY参数，达到与写入数据并发的效果。
 
-1. 唯一索引按照uk_表名_字段名的规则命名。
+1. 建议对WHERE中带多个字段AND的高频检索，参考数据的分布情况，建立多个字段的联合索引。
 
-1. 普通索引按照idx_表名_字段名的规则命名。
+1. 如果表中针对一小部分数据存在相对于其他数据的高频访问，可以对这部分数据建立带WHERE条件的部分索引。
 
-1. 索引名长度限制在30字符以内。当长度超过30位时，可使用缩写来缩减长度。
+1. 建议对经常使用表达式作为查询条件的检索，可以使用表达式或者函数索引加速检索。
 
 1. 建议不要建过多的索引，一般不超过6个。核心数据表可以适当增加索引个数。
 
 
-
 ## 3 操作规范
+
+1. 为数据库访问账号设置复杂密码。
 
 1. 开发测试以及相关业务操作，不要使用数据库超级用户，非常危险。
 
@@ -118,11 +128,15 @@ PostgreSQL功能异常强大，希望通过以下规范，使PostgreSQL的功能
 
 1. 建议复杂的统计查询可以尝试[窗口函数Window Functions](https://www.postgresql.org/docs/current/static/tutorial-window.html)。
 
+1. 建议大批量数据写入时，使用COPY而不是INSERT以提高写入速度。
+
+1. 建议对报表类或者生产基础数据的查询，使用物化视图(MATERIALIZED VIEW)定期固化数据快照，避免多表跑相同的查询。
+
 1. 建议将单个事务中的多条表操作进行拆分或者不放在单个事务中，以缩小单个事务的粒度，减少LOCK资源，避免锁等待以及死锁的发生。
 
 1. 在数据库事务中进行分页操作时，建议通过游标返回分页结果以防止越往后越慢的情况。
 
-1. 建议在预估QUERY的执行时间，并在数据库事务中设置超时时间，以防止长时间持锁和雪崩的发生(备注2)。
+1. 建议在预估QUERY的执行时间，并在数据库事务中设置超时时间，以防止长时间持锁和雪崩的发生(备注5)。
 
 1. 游标使用后应当就及时关闭。
 
@@ -134,10 +148,12 @@ PostgreSQL功能异常强大，希望通过以下规范，使PostgreSQL的功能
 
 
 ## 4 备注
+1. 数据库对象：database/schema/table/view/column/index/sequence/function/trigger等。
+
+1. 查看字符编码：show server_encoding;
 
 1. 填充因子示例：CREATE TABLE sample(id serial, number integer) WITH (fillfactor=85);
 
+1. pg支持的范围类型：int4range int8range numrange tsrange tstzrange daterange。
+
 1. set local statement_timeout = '10s';
-
-
-
